@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 import { MapPin, Calendar, Video, Phone, Star, Search, Filter, Clock, BookOpen, Users, Heart, Brain, Sparkles, ArrowRight, Youtube, FileText, MessageCircle, CheckCircle2, BookMarked, Headphones, ScrollText } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -131,10 +133,13 @@ const quickMatchQuestions = [
   },
 ];
 
+
 export default function ConsultationPage() {
     const [selectedTab, setSelectedTab] = useState("find");
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [quizAnswers, setQuizAnswers] = useState([]);
+    const { user, isLoaded, isSignedIn } = useUser();
+  const router = useRouter();
   
     const handleQuizAnswer = (answer) => {
       const newAnswers = [...quizAnswers, answer];
@@ -144,6 +149,17 @@ export default function ConsultationPage() {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
       }
     };
+    useEffect(() => {
+      if (isLoaded && !isSignedIn) {
+        router.push('/sign-in');
+      }
+    }, [isLoaded, isSignedIn, router]);
+  
+    if (!isLoaded) {
+      return <div className="min-h-screen flex items-center justify-center text-lg">Loading...</div>;
+    }
+  
+    if (!isSignedIn) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 p-6">

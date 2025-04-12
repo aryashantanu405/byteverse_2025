@@ -252,7 +252,7 @@ export default function Profile() {
             <Card className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-semibold">Therapy Sessions</h2>
-                <Button variant="outline">
+                <Button variant="outline" onClick={() => router.push('/Consultation')} size="sm">
                   <CalendarClock className="mr-2 h-4 w-4" />
                   Book Session
                 </Button>
