@@ -41,10 +41,6 @@ MindSpace is a  mental health tracking web platform developed using Next.js, des
 * `tw-animate-css`: Tailwind css animation library.
 * `node`: Node.js runtime
 
-# Machine Learning Model Integration
-
-(Add detailed instructions on how the ML model is integrated, including API endpoints, data processing, and any specific setup required.)
-
 # Future Enhancements
 
 * Integration of more advanced AI algorithms for personalized recommendations.
@@ -60,6 +56,4 @@ MindSpace is a  mental health tracking web platform developed using Next.js, des
 3.Aryan Raj(frontend+database)
 4.Rachit Kumar(Machine Learning + AI chatbot) 
 
-## License
 
-(Add license information.)
