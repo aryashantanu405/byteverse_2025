@@ -28,6 +28,7 @@ import {
   PartyPopper
 } from "lucide-react";
 import Link from "next/link";
+import { set } from 'date-fns';
 
 const moodIcons = {
   1: <Frown className="w-12 h-12 text-red-500" />,
@@ -57,7 +58,8 @@ export default function Profile() {
   ]);
   const [currentMood, setCurrentMood] = useState(3);
   const [showMoodDialog, setShowMoodDialog] = useState(false);
-
+  const [averagemood, setaveragemood] = useState(3);
+  const [happiest_day, sethappiest_day] = useState("Mon");
   const handleMoodSubmit = () => {
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const today = days[new Date().getDay()];
@@ -77,10 +79,25 @@ export default function Profile() {
     
     setShowMoodDialog(false);
   };
+  const getmooddata = async () => {
+    const response = await fetch("/api/user/mooddata", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    setMoodData(data.moodvalues);
+    setaveragemood(data.averagemood);
+    sethappiest_day(data.happiestDay);
+  }
 
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
       router.push('/sign-in');
+    }
+    else{
+      getmooddata();
     }
   }, [isLoaded, isSignedIn, router]);
 
@@ -101,6 +118,7 @@ export default function Profile() {
     { text: "Write in journal 3 times this week", completed: false },
     { text: "Take a walk outside each day", completed: true },
   ];
+  
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-background to-muted p-6">
@@ -147,7 +165,7 @@ export default function Profile() {
                   <Slider
                     value={[currentMood]}
                     onValueChange={([value]) => setCurrentMood(value)}
-                    max={4}
+                    max={5}
                     min={1}
                     step={1}
                     className="w-full"
@@ -203,11 +221,11 @@ export default function Profile() {
           <div className="grid grid-cols-3 gap-4 mt-6">
             <div className="bg-muted p-4 rounded-lg">
               <p className="text-sm text-muted-foreground">Happiest Day</p>
-              <p className="font-semibold">Wednesday</p>
+              <p className="font-semibold">{happiest_day}</p>
             </div>
             <div className="bg-muted p-4 rounded-lg">
               <p className="text-sm text-muted-foreground">Average Mood</p>
-              <p className="font-semibold">4.0</p>
+              <p className="font-semibold">{averagemood}</p>
             </div>
             <div className="bg-muted p-4 rounded-lg">
               <p className="text-sm text-muted-foreground">Mood Entries</p>

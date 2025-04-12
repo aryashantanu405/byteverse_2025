@@ -18,27 +18,28 @@ import { Button } from '@/components/ui/button';
 
 export default function DashboardPage() {
 
-    const { isSignedIn } = useUser();
+    const { isSignedIn,user } = useUser();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [moodSummary, setMoodSummary] = useState({
+      calm: 4,
+      stressed: 3,
+      total: 7,
+    });
     const router = useRouter();
-  
     useEffect(() => {
       if (!isSignedIn) {
         router.push('/sign-in');
       }
+      else{
+        sendnewuserdetail();
+        getmoodsummary();
+      }
     }, [isSignedIn]);
+   
   
     if (!isSignedIn) {
       return null; // Optionally, render a loading indicator here
     }
-
-
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const moodSummary = {
-    calm: 3,
-    stressed: 2,
-    total: 5,
-  };
 
   const quickActions = [
     {
@@ -64,6 +65,40 @@ export default function DashboardPage() {
     },
   ];
 
+const sendnewuserdetail=async () => {
+  try{
+    const response=await fetch('/api/newuser', {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body:JSON.stringify({
+        user
+      }),
+    });
+  }
+  catch(error){
+console.error('Error sending data to server:', error);
+  }
+}
+const getmoodsummary=async () => {
+  try{
+    const response=await fetch('/api/user/moodsummary', {
+      method:'GET',
+      headers:{
+        'Content-Type':'application/json',
+      },
+    });
+    const data=await response.json();
+    if(!response.ok){
+      throw new Error('Network response was not ok');
+    }
+    setMoodSummary(data);
+  }
+  catch(error){
+    console.error('Error fetching mood summary:', error);
+  }
+}
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Top Navigation */}
