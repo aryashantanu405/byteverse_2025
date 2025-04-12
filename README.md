@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# MindSpace - Mental Health Tracker
 
-## Getting Started
+# Project Overview
 
-First, run the development server:
+MindSpace is a mental health tracking website developed using Next.js, designed to empower users to monitor and understand their emotional well-being. Built for a health-focused hackathon, this platform integrates journaling, mood tracking, AI-powered sentiment analysis, and interactive visualizations to provide a comprehensive mental health management tool.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+# Key Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+* **User Authentication:** Secure user authentication provided by Clerk, ensuring user data privacy and security.
+* **Mood Tracking:** Users can log their daily mood changes, providing a visual representation of their emotional trends.
+* **Journaling:** A personal journal feature allows users to record their thoughts and feelings, fostering self-reflection.
+* **AI-Powered Chatbot:** An interactive chatbot facilitates discussions on mental health concerns, offering support and guidance.
+* **Sentiment Analysis:** An integrated machine learning model analyzes journal entries to detect mood emotions, providing objective insights.
+* **Graphical Mood Visualization:** Mood data is presented graphically using Recharts, enabling users to visualize their emotional patterns over the past week.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+# Technologies Used
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+* Next.js: A React framework for building server-rendered and statically generated web applications.
+* React: A JavaScript library for building user interfaces.
+* Clerk: A user authentication and management platform.
+* Tailwind CSS: A utility-first CSS framework for rapid UI development.
+* Shadcn UI: A collection of accessible and reusable UI components built with Radix UI and Tailwind CSS.
+* Recharts: A charting library for React.
+* Node.js: A JavaScript runtime environment.
+* Machine Learning (Specific Model Details): (Please insert details about the specific ML model and libraries used, e.g., TensorFlow.js, Python with Flask API, etc.)
 
-## Learn More
+# Dependencies
 
-To learn more about Next.js, take a look at the following resources:
+* `next`: Next.js framework
+* `react`: React library
+* `react-dom`: React DOM library
+* `@clerk/nextjs`: Clerk Next.js integration
+* `tailwindcss`: Tailwind CSS framework
+* `class-variance-authority`: Utility for creating type-safe class variants.
+* `clsx`: Utility for conditionally joining class names.
+* `tailwind-merge`: Utility for merging Tailwind CSS classes.
+* `lucide-react`: Icon library.
+* `recharts`: React charting library
+* `@radix-ui/react-avatar`: Avatar component.
+* `@radix-ui/react-slot`: Slot component.
+* `tw-animate-css`: Tailwind css animation library.
+* `node`: Node.js runtime
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Machine Learning Model Integration
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+(Add detailed instructions on how the ML model is integrated, including API endpoints, data processing, and any specific setup required.)
 
-## Deploy on Vercel
+# Future Enhancements
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+* Integration of more advanced AI algorithms for personalized recommendations.
+* Community forums for peer support.
+* Integration with wearable devices for real-time mood tracking.
+* Add more personalized graphical data.
+* Add more advanced chatbot features.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Team
+
+1.Arya Shantanu(Team Leader , frontend+ backend)
+2.Rakshit Singh(frontend+backend)
+3.Aryan Raj(frontend+database)
+4.Rachit Kumar(Machine Learning + AI chatbot) 
+
+## License
+
+(Add license information.)
