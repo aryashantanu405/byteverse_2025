@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect,useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import {
   BookHeart,
@@ -15,6 +17,21 @@ import {
 import { Button } from '@/components/ui/button';
 
 export default function DashboardPage() {
+
+    const { isSignedIn } = useUser();
+    const router = useRouter();
+  
+    useEffect(() => {
+      if (!isSignedIn) {
+        router.push('/sign-in');
+      }
+    }, [isSignedIn]);
+  
+    if (!isSignedIn) {
+      return null; // Optionally, render a loading indicator here
+    }
+
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const moodSummary = {
