@@ -77,10 +77,10 @@ const Page = () => {
                 formatter={(value, name, props) => props.payload.label}
                 labelFormatter={() => ''}
                 contentStyle={{
-                  backgroundColor: '#111',
+                  backgroundColor: '#fff',
                   color: '#fff',
                   borderRadius: '8px',
-                  fontSize: '12px',
+                  fontSize: '14px',
                   padding: '8px',
                 }}
               />
