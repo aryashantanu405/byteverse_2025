@@ -2,7 +2,7 @@
 
 # Project Overview
 
-MindSpace is a mental health tracking website developed using Next.js, designed to empower users to monitor and understand their emotional well-being. Built for a health-focused hackathon, this platform integrates journaling, mood tracking, AI-powered sentiment analysis, and interactive visualizations to provide a comprehensive mental health management tool.
+MindSpace is a  mental health tracking web platform developed using Next.js, designed to empower users to monitor and understand their emotional well-being. Built under theme of Healthcare and Medical, this platform integrates journaling, mood tracking, AI-powered sentiment analysis, and interactive visualizations to provide a comprehensive mental health management tool.
 
 # Key Features
 
@@ -41,10 +41,6 @@ MindSpace is a mental health tracking website developed using Next.js, designed 
 * `tw-animate-css`: Tailwind css animation library.
 * `node`: Node.js runtime
 
-# Machine Learning Model Integration
-
-(Add detailed instructions on how the ML model is integrated, including API endpoints, data processing, and any specific setup required.)
-
 # Future Enhancements
 
 * Integration of more advanced AI algorithms for personalized recommendations.
@@ -60,6 +56,4 @@ MindSpace is a mental health tracking website developed using Next.js, designed 
 3.Aryan Raj(frontend+database)
 4.Rachit Kumar(Machine Learning + AI chatbot) 
 
-## License
 
-(Add license information.)
