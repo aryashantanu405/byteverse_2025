@@ -52,6 +52,29 @@ export default function JournalPage() {
   const [detectedEmotion, setDetectedEmotion] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const sendJournalEntry = async (entry) => {
+    try {
+      const response = await fetch('/api/journal', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ journalEntry: entry }), // Ensure the field name matches the server-side code
+      });
+  
+      if (!response.ok) {
+        console.error('Error sending journal entry:', response.statusText);
+      } else {
+        const responseData = await response.json();
+        console.log('Server response:', responseData);
+      }
+    } catch (error) {
+      console.error('Error sending journal entry:', error);
+    }
+  };
+  
+
+
   const handleSubmit = async () => {
     if (!currentEntry.trim()) return;
 
@@ -61,6 +84,7 @@ export default function JournalPage() {
     await new Promise(resolve => setTimeout(resolve, 1500));
     const emotions = ['Happy 😊', 'Sad 😢', 'Excited 🎉', 'Anxious 😟', 'Peaceful 😌'];
     const randomEmotion = emotions[Math.floor(Math.random() * emotions.length)];
+    sendJournalEntry(currentEntry);
     
     const newEntry = {
       id: Date.now().toString(),

@@ -59,6 +59,23 @@ export default function Assessment() {
   const [answers, setAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
 
+  const senddatatoserver = async (calculatedMaxScore) => {
+    try {
+      const response = await fetch('/api/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ maxScore: calculatedMaxScore }),
+      });
+      if (!response.ok) {
+        console.error('Error sending data to server:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error sending data to server:', error);
+    }
+  };
+
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
       router.push('/sign-in');
@@ -83,9 +100,9 @@ export default function Assessment() {
 
   const calculateScore = () => {
     const total = Object.values(answers).reduce((sum, value) => sum + parseInt(value), 0);
-    const maxScore = questions.length * 4;
-    const percentage = (total / maxScore) * 100;
-
+    const calculatedMaxScore = questions.length * 4; // Calculate max score locally
+    const percentage = (total / calculatedMaxScore) * 100;
+    senddatatoserver(calculatedMaxScore); // Pass the calculated max score
     if (percentage <= 33) {
       return {
         level: 'Low😊',
