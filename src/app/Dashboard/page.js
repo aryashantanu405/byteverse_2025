@@ -43,14 +43,14 @@ export default function DashboardPage() {
   const quickActions = [
     {
       title: 'Write Journal',
-      href: '/Profile/Journal',
+      href: '/Journal',
       icon: <BookHeart className="w-8 h-8 text-indigo-500" />,
       bgColor: 'bg-indigo-50',
       description: 'Record your thoughts and feelings',
     },
     {
       title: 'View Mood History',
-      href: '/mood-history',
+      href: '/MoodTracker',
       icon: <BarChart3 className="w-8 h-8 text-emerald-500" />,
       bgColor: 'bg-emerald-50',
       description: 'Track your emotional journey',
