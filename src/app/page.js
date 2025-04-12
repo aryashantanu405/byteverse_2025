@@ -3,9 +3,11 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, Brain, Heart, Shield } from 'lucide-react';
+import { useUser, SignOutButton } from '@clerk/nextjs';
 
 export default function Landing() {
   const router = useRouter();
+  const { user, isSignedIn } = useUser();
 
   return (
     <div className="min-h-screen bg-gradient-to-t from-headingcolor to-c4 text-black">
@@ -14,19 +16,44 @@ export default function Landing() {
           <Brain className="w-8 h-8 text-purple-500" />
           <span className="text-2xl font-bold text-black">MindSpace</span>
         </div>
-        <div className="space-x-4 flex">
-          <button
-            onClick={() => router.push('/sign-in')}
-            className="px-2 py-2 text-blue-600 hover:text-purple-300 transition-colors border-blue-400"
-          >
-            Sign In
-          </button>
-          <button
-            onClick={() => router.push('/sign-up')}
-            className="px-2 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
-          >
-            Sign Up
-          </button>
+
+        <div className="space-x-4 flex items-center">
+          {isSignedIn ? (
+            <>
+              <button
+                onClick={() => router.push('/Dashboard')}
+                className="flex items-center gap-2 text-purple-600 hover:text-purple-800 transition-colors"
+              >
+                <img
+                  src={user?.imageUrl || '/default-avatar.png'}
+                  alt="User Avatar"
+                  className="w-8 h-8 rounded-full"
+                />
+                <span className="hidden md:inline font-medium">{user?.firstName}</span>
+              </button>
+
+              <SignOutButton>
+                <button className="px-3 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors">
+                  Sign Out
+                </button>
+              </SignOutButton>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => router.push('/sign-in')}
+                className="px-2 py-2 text-blue-600 hover:text-purple-300 transition-colors border-blue-400"
+              >
+                Sign In
+              </button>
+              <button
+                onClick={() => router.push('/sign-up')}
+                className="px-2 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
+              >
+                Sign Up
+              </button>
+            </>
+          )}
         </div>
       </nav>
 
@@ -39,8 +66,9 @@ export default function Landing() {
             Join our community of people who prioritize their mental well-being.
             Get support, track your mood, and connect with professionals.
           </p>
+
           <button
-            onClick={() => router.push('/sign-up')}
+            onClick={() => router.push(isSignedIn ? '/Dashboard' : '/sign-in')}
             className="group px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:opacity-90 transition-all flex items-center gap-2 mx-auto"
           >
             Get Started
@@ -60,6 +88,7 @@ export default function Landing() {
               Monitor your emotional well-being with our daily mood tracker.
             </p>
           </div>
+
           <div className="bg-boxcolor backdrop-blur-sm rounded-xl p-6 text-center">
             <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
               <Heart className="w-6 h-6 text-purple-500" />
@@ -71,6 +100,7 @@ export default function Landing() {
               Connect with licensed therapists and counselors.
             </p>
           </div>
+
           <div className="bg-boxcolor backdrop-blur-sm rounded-xl p-6 text-center">
             <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
               <Shield className="w-6 h-6 text-purple-500" />
