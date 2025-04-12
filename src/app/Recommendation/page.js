@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Music, Wind, Quote, RefreshCw, Heart } from 'lucide-react';
-
+import { useRouter } from 'next/navigation';
+import { useUser } from '@clerk/nextjs';
 const recommendations = [
   {
     music: {
@@ -32,12 +33,26 @@ const recommendations = [
 ];
 
 export default function Home() {
+  const { user, isLoaded, isSignedIn } = useUser();
+  const router = useRouter();
+  
   const [currentIndex, setCurrentIndex] = useState(0);
   const currentRecommendation = recommendations[currentIndex];
 
   const refreshRecommendation = () => {
     setCurrentIndex((prev) => (prev + 1) % recommendations.length);
   };
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.push('/sign-in');
+    }
+  }, [isLoaded, isSignedIn, router]);
+
+  if (!isLoaded) {
+    return <div className="min-h-screen flex items-center justify-center text-lg">Loading...</div>;
+  }
+
+  if (!isSignedIn) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 flex items-center justify-center p-4">
