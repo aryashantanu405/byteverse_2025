@@ -1,6 +1,12 @@
-import mongoose from "mongoose";
-
-export const ConnectDB = async () => {
-    await mongoose.connect('mongodb+srv://Aryan:Aryan@841424@cluster0.sdwd4ww.mongodb.net/Mindhub');
-    console.log("MongoDB connected successfully");
-}
+export async function ConnectDB() {
+    try {
+      const connection = await mongoose.connect(process.env.MONGO_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+      console.log("Database connected:", connection.connection.host);
+    } catch (error) {
+      console.error("Database connection error:", error.message);
+      throw new Error("Failed to connect to database");
+    }
+  }
