@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { format } from 'date-fns';
 import { Book, Send, Sparkles } from 'lucide-react';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_FLASK_URL || "http://localhost:5000";
+
 const mockEntries = [
   {
     id: '1',
@@ -22,28 +24,13 @@ const mockEntries = [
 
 const emotionVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
-    y: 0,
-    transition: {
-      type: "spring",
-      stiffness: 200,
-      damping: 20
-    }
-  },
-  exit: { 
-    opacity: 0,
-    y: -20,
-    transition: { duration: 0.2 }
-  }
+  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 200, damping: 20 } },
+  exit: { opacity: 0, y: -20, transition: { duration: 0.2 } }
 };
 
 const pageVariants = {
   hidden: { opacity: 0 },
-  visible: { 
-    opacity: 1,
-    transition: { staggerChildren: 0.1 }
-  }
+  visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
 };
 
 export default function JournalPage() {
@@ -56,18 +43,12 @@ export default function JournalPage() {
     try {
       const response = await fetch('/api/journal', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ journalEntry: entry }),
       });
 
-      if (!response.ok) {
-        console.error('Error sending journal entry:', response.statusText);
-      } else {
-        const responseData = await response.json();
-        console.log('Server response:', responseData);
-      }
+      if (!response.ok) console.error('Error sending journal entry:', response.statusText);
+      else console.log('Server response:', await response.json());
     } catch (error) {
       console.error('Error sending journal entry:', error);
     }
@@ -75,49 +56,43 @@ export default function JournalPage() {
 
   const detectEmotion = async (entry) => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/predict', {
+      const response = await fetch(`${API_BASE_URL}/predict`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: entry })
       });
 
-      if (!response.ok) {
-        console.error('Error detecting emotion:', response.statusText);
-        return 'Neutral 😐'; // Default emotion in case of failure
-      }
-
+      if (!response.ok) return 'Neutral 😐';
       const result = await response.json();
-      return result.output?.emotion || 'Neutral 😐'; // Ensure fallback if no emotion is detected
+      return result.output?.emotion || 'Neutral 😐';
     } catch (error) {
-      console.error('Error detecting emotion:', error);
-      return 'Neutral 😐'; // Default emotion in case of failure
+      console.error('Emotion detection error:', error);
+      return 'Neutral 😐';
     }
   };
 
   const handleSubmit = async () => {
-    if (!currentEntry.trim()) return;
+    if (isSubmitting || !currentEntry.trim()) return;
+    if (currentEntry.length > 1000) return alert("Keep it under 1000 characters.");
 
     setIsSubmitting(true);
+    setDetectedEmotion("Detecting... 🤖");
 
-    // Send the entry to the backend for emotion detection
     const emotion = await detectEmotion(currentEntry);
-    
-    // Send the journal entry to the backend
-    sendJournalEntry(currentEntry);
+    await sendJournalEntry(currentEntry);
 
     const newEntry = {
       id: Date.now().toString(),
       content: currentEntry,
       date: new Date(),
-      emotion: emotion
+      emotion
     };
 
-    setDetectedEmotion(emotion);
     setEntries([newEntry, ...entries]);
     setCurrentEntry('');
+    setDetectedEmotion(emotion);
     setIsSubmitting(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -128,22 +103,19 @@ export default function JournalPage() {
       variants={pageVariants}
     >
       <div className="max-w-4xl mx-auto">
-        <motion.div 
-          className="flex items-center gap-3 mb-8"
-          variants={pageVariants}
-        >
+        <motion.div className="flex items-center gap-3 mb-8" variants={pageVariants}>
           <Book className="w-8 h-8 text-purple-600" />
           <h1 className="text-3xl font-bold text-gray-800">My Journal</h1>
         </motion.div>
 
-        <motion.div 
-          className="bg-white rounded-xl shadow-xl p-6 mb-8"
-          variants={pageVariants}
-        >
+        <motion.div className="bg-white rounded-xl shadow-xl p-6 mb-8" variants={pageVariants}>
           <div className="relative">
             <textarea
               value={currentEntry}
-              onChange={(e) => setCurrentEntry(e.target.value)}
+              onChange={(e) => {
+                setCurrentEntry(e.target.value);
+                setDetectedEmotion(null);
+              }}
               placeholder="How are you feeling today?"
               className="w-full min-h-[200px] p-4 bg-gray-50 rounded-lg border-2 border-purple-100 focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50 transition-all duration-200 resize-none text-gray-700"
               style={{
@@ -152,7 +124,7 @@ export default function JournalPage() {
                 paddingTop: "16px"
               }}
             />
-            
+
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -160,14 +132,10 @@ export default function JournalPage() {
               disabled={isSubmitting}
               className="absolute bottom-4 right-4 bg-purple-600 text-white px-6 py-2 rounded-full flex items-center gap-2 hover:bg-purple-700 transition-colors duration-200 disabled:opacity-50"
             >
-              {isSubmitting ? (
-                <Sparkles className="w-5 h-5 animate-spin" />
-              ) : (
-                <>
-                  <Send className="w-5 h-5" />
-                  <span>Submit</span>
-                </>
-              )}
+              {isSubmitting ? <Sparkles className="w-5 h-5 animate-spin" /> : <>
+                <Send className="w-5 h-5" />
+                <span>Submit</span>
+              </>}
             </motion.button>
           </div>
 
@@ -188,10 +156,7 @@ export default function JournalPage() {
           </AnimatePresence>
         </motion.div>
 
-        <motion.div 
-          className="space-y-4"
-          variants={pageVariants}
-        >
+        <motion.div className="space-y-4" variants={pageVariants}>
           {entries.map((entry) => (
             <motion.div
               key={entry.id}
