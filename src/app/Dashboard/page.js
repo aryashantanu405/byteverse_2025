@@ -6,6 +6,7 @@ import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import Image from 'next/image';
 import chatbotpic from '../../../public/chatbot.png'
+import Header from '@/components/ui/Header';
 import {
   BookHeart,
   BarChart3,
@@ -104,31 +105,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 relative">
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <div className="flex items-center">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="lg:hidden"
-              >
-                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </Button>
-              <h1 className="text-2xl font-bold text-gray-900 ml-2 lg:ml-0">Mindful</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="icon">
-                <Bell className="h-6 w-6 text-gray-400" />
-              </Button>
-              <Button variant="ghost" size="icon">
-                <UserCircle className="h-6 w-6 text-gray-400" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
+    <Header/>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
