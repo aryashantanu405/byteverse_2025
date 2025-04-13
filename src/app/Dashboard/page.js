@@ -1,9 +1,11 @@
 'use client';
 
-import { useEffect,useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
+import Image from 'next/image';
+import chatbotpic from '../../../public/chatbot.png'
 import {
   BookHeart,
   BarChart3,
@@ -15,31 +17,31 @@ import {
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import Script from "next/script";
 
 export default function DashboardPage() {
+  const { isSignedIn, user } = useUser();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [moodSummary, setMoodSummary] = useState({
+    calm: 4,
+    stressed: 3,
+    total: 7,
+  });
+  const router = useRouter();
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
-    const { isSignedIn,user } = useUser();
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [moodSummary, setMoodSummary] = useState({
-      calm: 4,
-      stressed: 3,
-      total: 7,
-    });
-    const router = useRouter();
-    useEffect(() => {
-      if (!isSignedIn) {
-        router.push('/sign-in');
-      }
-      else{
-        sendnewuserdetail();
-        getmoodsummary();
-      }
-    }, [isSignedIn]);
-   
-  
+  useEffect(() => {
     if (!isSignedIn) {
-      return null; // Optionally, render a loading indicator here
+      router.push('/sign-in');
+    } else {
+      sendnewuserdetail();
+      getmoodsummary();
     }
+  }, [isSignedIn]);
+
+  if (!isSignedIn) {
+    return null;
+  }
 
   const quickActions = [
     {
@@ -65,45 +67,43 @@ export default function DashboardPage() {
     },
   ];
 
-const sendnewuserdetail=async () => {
-  try{
-    const response=await fetch('/api/newuser', {
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-      },
-      body:JSON.stringify({
-        user
-      }),
-    });
-  }
-  catch(error){
-console.error('Error sending data to server:', error);
-  }
-}
-const getmoodsummary=async () => {
-  try{
-    const response=await fetch('/api/user/moodsummary', {
-      method:'GET',
-      headers:{
-        'Content-Type':'application/json',
-      },
-    });
-    const data=await response.json();
-    if(!response.ok){
-      throw new Error('Network response was not ok');
+  const sendnewuserdetail = async () => {
+    try {
+      const response = await fetch('/api/newuser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user,
+        }),
+      });
+    } catch (error) {
+      console.error('Error sending data to server:', error);
     }
-    setMoodSummary(data);
-  }
-  catch(error){
-    console.error('Error fetching mood summary:', error);
-  }
-}
-const username=user.username;
+  };
+
+  const getmoodsummary = async () => {
+    try {
+      const response = await fetch('/api/user/moodsummary', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      setMoodSummary(data);
+    } catch (error) {
+      console.error('Error fetching mood summary:', error);
+    }
+  };
+  const username = user.username;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Top Navigation */}
+    <div className="min-h-screen bg-gray-50 relative">
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
@@ -131,13 +131,11 @@ const username=user.username;
       </nav>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Welcome */}
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Hi {username} 👋</h2>
           <p className="text-gray-600">How are you feeling today?</p>
         </div>
 
-        {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {quickActions.map((action, index) => (
             <Link
@@ -158,7 +156,6 @@ const username=user.username;
           ))}
         </div>
 
-        {/* Weekly Summary */}
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <h3 className="text-xl font-semibold text-gray-900 mb-4">Weekly Summary</h3>
           <div className="flex items-center space-x-2">
@@ -186,7 +183,6 @@ const username=user.username;
           </div>
         </div>
 
-        {/* Daily Tip */}
         <div className="bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 rounded-xl p-6 mt-8 shadow-sm">
           <h3 className="text-xl font-semibold text-gray-900 mb-2">✨ Daily Wellness Tip</h3>
           <p className="text-gray-700">
@@ -194,7 +190,6 @@ const username=user.username;
           </p>
         </div>
 
-        {/* Suggested Activities */}
         <div className="bg-white rounded-xl p-6 mt-8 shadow-sm">
           <h3 className="text-xl font-semibold text-gray-900 mb-4">🧘‍♀ Suggested Activities</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -219,7 +214,6 @@ const username=user.username;
           </div>
         </div>
 
-        {/* Mood Progress */}
         <div className="bg-white rounded-xl p-6 mt-8 shadow-sm mb-8">
           <h3 className="text-xl font-semibold text-gray-900 mb-4">📈 Mood Progress</h3>
           <p className="text-sm text-gray-600 mb-2">Your emotional trend this week:</p>
@@ -228,6 +222,38 @@ const username=user.username;
           </div>
         </div>
       </main>
+
+      <button
+        onClick={() => setIsChatbotOpen(true)}
+        className="fixed bottom-20 right-8 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:scale-105 transition-transform duration-300 z-50"
+      >
+        <Image src={chatbotpic} alt="Chatbot" width={50} height={50} />
+      </button>
+
+      {isChatbotOpen && (
+        <div className="fixed bottom-24 right-8 bg-white rounded-lg shadow-xl p-4 w-[400px] h-[600px] z-50">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-semibold">Chatbot</h2>
+            <button
+              onClick={() => setIsChatbotOpen(false)}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              <X className="h-6 w-6" />
+            </button>
+          </div>
+          <Script
+            type="module"
+            src="https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js"
+            strategy="lazyOnload"
+          />
+          <zapier-interfaces-chatbot-embed
+            is-popup="false"
+            chatbot-id="cm9emlr7b000nz0vew03zrj3f"
+            height="550px"
+            width="380px"
+          />
+        </div>
+      )}
     </div>
   );
 }
