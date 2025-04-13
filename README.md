@@ -1,4 +1,5 @@
 # MindSpace - Mental Health Tracker
+#Try it on 'https://byteverse-2025.vercel.app/'
 
 # Project Overview
 
@@ -55,5 +56,7 @@ MindSpace is a  mental health tracking web platform developed using Next.js, des
 2.Rakshit Singh(frontend+backend)
 3.Aryan Raj(frontend+database)
 4.Rachit Kumar(Machine Learning + AI chatbot) 
+
+
 
 
