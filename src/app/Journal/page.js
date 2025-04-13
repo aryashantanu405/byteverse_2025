@@ -59,9 +59,9 @@ export default function JournalPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ journalEntry: entry }), // Ensure the field name matches the server-side code
+        body: JSON.stringify({ journalEntry: entry }),
       });
-  
+
       if (!response.ok) {
         console.error('Error sending journal entry:', response.statusText);
       } else {
@@ -72,28 +72,49 @@ export default function JournalPage() {
       console.error('Error sending journal entry:', error);
     }
   };
-  
 
+  const detectEmotion = async (entry) => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: entry })
+      });
+
+      if (!response.ok) {
+        console.error('Error detecting emotion:', response.statusText);
+        return 'Neutral 😐'; // Default emotion in case of failure
+      }
+
+      const result = await response.json();
+      return result.output?.emotion || 'Neutral 😐'; // Ensure fallback if no emotion is detected
+    } catch (error) {
+      console.error('Error detecting emotion:', error);
+      return 'Neutral 😐'; // Default emotion in case of failure
+    }
+  };
 
   const handleSubmit = async () => {
     if (!currentEntry.trim()) return;
 
     setIsSubmitting(true);
+
+    // Send the entry to the backend for emotion detection
+    const emotion = await detectEmotion(currentEntry);
     
-    // Simulate API call for emotion detection
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    const emotions = ['Happy 😊', 'Sad 😢', 'Excited 🎉', 'Anxious 😟', 'Peaceful 😌'];
-    const randomEmotion = emotions[Math.floor(Math.random() * emotions.length)];
+    // Send the journal entry to the backend
     sendJournalEntry(currentEntry);
-    
+
     const newEntry = {
       id: Date.now().toString(),
       content: currentEntry,
       date: new Date(),
-      emotion: randomEmotion
+      emotion: emotion
     };
 
-    setDetectedEmotion(randomEmotion);
+    setDetectedEmotion(emotion);
     setEntries([newEntry, ...entries]);
     setCurrentEntry('');
     setIsSubmitting(false);

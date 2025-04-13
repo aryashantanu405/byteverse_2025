@@ -2,11 +2,11 @@
 import { NextResponse } from "next/server";
 
 const moodvalues = [
-  { day: "Mon", mood: 2 },
+  { day: "Mon", mood: 4 },
   { day: "Tue", mood: 4 },
-  { day: "Wed", mood: 1 },
+  { day: "Wed", mood: 3 },
   { day: "Thu", mood: 2 },
-  { day: "Fri", mood: 5 },
+  { day: "Fri", mood: 2 },
   { day: "Sat", mood: 4 },
   { day: "Sun", mood: 4 },
 ];

@@ -1,8 +1,8 @@
 'use server'
 import { NextResponse } from "next/server"
 const moodSummary = {
-    calm: 1,
-    stressed: 6,
+    calm: 2,
+    stressed: 4 ,
     total: 7,
   };
 export async function GET(request){
