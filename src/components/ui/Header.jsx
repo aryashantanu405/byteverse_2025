@@ -6,12 +6,12 @@ import { useState } from "react";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 const navItems = [
-  { name: "Dashboard", href: "/dashboard" },
-  { name: "Journal", href: "/journal" },
-  { name: "Mood Tracker", href: "/mood-tracker" },
-  { name: "Consultation", href: "/consultation" },
-  { name: "Recommendation", href: "/recommendation" },
-  { name: "Profile", href: "/profile" },
+  { name: "Dashboard", href: "/Dashboard" },
+  { name: "Journal", href: "/Journal" },
+  { name: "Mood Tracker", href: "/MoodTracker" },
+  { name: "Consultation", href: "/Consultation" },
+  { name: "Recommendation", href: "/Recommendation" },
+  { name: "Profile", href: "/Profile" },
 ];
 
 export default function Header() {
