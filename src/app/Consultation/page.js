@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Image from "next/image";
 import {
   Select,
   SelectContent,
@@ -222,10 +223,12 @@ export default function ConsultationPage() {
                   {professionals.map((professional) => (
                     <Card key={professional.id} className="p-6 hover:shadow-lg transition-shadow">
                       <div className="flex gap-6">
-                        <img
+                        <Image
                           src={professional.image}
                           alt={professional.name}
                           className="w-24 h-24 rounded-full object-cover"
+                          width={96}
+                          height={96}
                         />
                         <div className="flex-1 space-y-2">
                           <div className="flex items-center justify-between">
@@ -287,7 +290,7 @@ export default function ConsultationPage() {
                   ) : (
                     <div className="text-center space-y-4">
                       <CheckCircle2 className="w-12 h-12 mx-auto text-green-500" />
-                      <p>Thanks for completing the quiz! We'll match you with the best professionals.</p>
+                      <p>Thanks for completing the quiz! We will match you with the best professionals.</p>
                       <Button
                         onClick={() => {
                           setCurrentQuestionIndex(0);
@@ -379,10 +382,12 @@ export default function ConsultationPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {supportCircles.map((circle) => (
                 <Card key={circle.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                  <img
+                  <Image
                     src={circle.image}
                     alt={circle.title}
                     className="w-full h-48 object-cover"
+                    width={400}
+                    height={200}
                   />
                   <div className="p-6 space-y-4">
                     <h3 className="text-xl font-semibold">{circle.title}</h3>
@@ -422,10 +427,12 @@ export default function ConsultationPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {resources.map((resource) => (
                 <Card key={resource.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                  <img
+                  <Image
                     src={resource.image}
                     alt={resource.title}
                     className="w-full h-48 object-cover"
+                    width={400} 
+                    height={200}
                   />
                   <div className="p-6 space-y-4">
                     <div className="flex items-center gap-2">

@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import Image from 'next/image';
-import chatbotpic from '../../../public/chatbot.png'
+import chatbotpic from '../../../public/chatbot.png';
 import Header from '@/components/ui/Header';
 import {
   BookHeart,
@@ -22,14 +22,33 @@ import Script from "next/script";
 
 export default function DashboardPage() {
   const { isSignedIn, user } = useUser();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [moodSummary, setMoodSummary] = useState({
-    calm: 4,
-    stressed: 3,
-    total: 7,
-  });
   const router = useRouter();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [moodSummary, setMoodSummary] = useState({ calm: 4, stressed: 3, total: 7 });
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+
+  const sendnewuserdetail = useCallback(async () => {
+    try {
+      const response = await fetch('/api/newuser', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user }),
+      });
+    } catch (error) {
+      console.error('Error sending data to server:', error);
+    }
+  }, [user]);
+
+  const getmoodsummary = useCallback(async () => {
+    try {
+      const response = await fetch('/api/user/moodsummary');
+      const data = await response.json();
+      if (!response.ok) throw new Error('Network response was not ok');
+      setMoodSummary(data);
+    } catch (error) {
+      console.error('Error fetching mood summary:', error);
+    }
+  }, []);
 
   useEffect(() => {
     if (!isSignedIn) {
@@ -38,11 +57,11 @@ export default function DashboardPage() {
       sendnewuserdetail();
       getmoodsummary();
     }
-  }, [isSignedIn]);
+  }, [isSignedIn, router, sendnewuserdetail, getmoodsummary]);
 
-  if (!isSignedIn) {
-    return null;
-  }
+  if (!isSignedIn) return null;
+
+  const username = user.username;
 
   const quickActions = [
     {
@@ -68,44 +87,9 @@ export default function DashboardPage() {
     },
   ];
 
-  const sendnewuserdetail = async () => {
-    try {
-      const response = await fetch('/api/newuser', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user,
-        }),
-      });
-    } catch (error) {
-      console.error('Error sending data to server:', error);
-    }
-  };
-
-  const getmoodsummary = async () => {
-    try {
-      const response = await fetch('/api/user/moodsummary', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      setMoodSummary(data);
-    } catch (error) {
-      console.error('Error fetching mood summary:', error);
-    }
-  };
-  const username = user.username;
-
   return (
     <div className="min-h-screen bg-gray-50 relative">
-    <Header/>
+      <Header />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
@@ -140,9 +124,7 @@ export default function DashboardPage() {
               <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-indigo-500 to-purple-500"
-                  style={{
-                    width: `${(moodSummary.calm / moodSummary.total) * 100}%`,
-                  }}
+                  style={{ width: `${(moodSummary.calm / moodSummary.total) * 100}%` }}
                 />
               </div>
             </div>
@@ -185,7 +167,7 @@ export default function DashboardPage() {
             <div className="bg-yellow-100 rounded-lg p-4">
               <h4 className="font-semibold text-yellow-700 mb-1">Gratitude Journal</h4>
               <p className="text-sm text-gray-700">
-                Write down 3 things you're grateful for today.
+                Write down 3 things you are grateful for today.
               </p>
             </div>
           </div>
@@ -200,6 +182,13 @@ export default function DashboardPage() {
         </div>
       </main>
 
+      <button
+        onClick={() => router.push('/Assessment')}
+        className="fixed top-20 right-10 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:scale-105 transition-transform duration-300 z-50"
+      >
+        Take a test
+      </button>
+          
       <button
         onClick={() => setIsChatbotOpen(true)}
         className="fixed bottom-20 right-8 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:scale-105 transition-transform duration-300 z-50"

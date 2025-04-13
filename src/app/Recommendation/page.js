@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Music, Wind, Quote, RefreshCw, Heart } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
+import Image from 'next/image';
 const recommendations = [
   {
     music: {
@@ -115,10 +116,12 @@ export default function Home() {
                 <div className="flex-1">
                   <h2 className="font-semibold text-gray-800">Breathing Exercise</h2>
                   <div className="mt-2 rounded-lg overflow-hidden">
-                    <img
+                    <Image
                       src={currentRecommendation.breathing.url}
                       alt="Calming scene"
                       className="w-full h-32 object-cover"
+                      width={400}
+                      height={200}
                     />
                   </div>
                   <p className="text-gray-600 text-sm mt-2">

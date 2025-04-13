@@ -13,29 +13,27 @@ import {
 import { motion } from 'framer-motion';
 
 const Page = () => {
-  const moodData = [
-    { date: '2025-04-06', mood: 'negative', note: 'Felt anxious' },
-    { date: '2025-04-07', mood: 'neutral', note: 'Felt okay' },
-    { date: '2025-04-08', mood: 'positive', note: 'Felt happy' },
-    { date: '2025-04-09', mood: 'positive', note: 'Productive day' },
-    { date: '2025-04-10', mood: 'negative', note: 'Overwhelmed' },
-  ];
+  const chartData = useMemo(() => {
+    const moodData = [
+      { date: '2025-04-06', mood: 'negative', note: 'Felt anxious' },
+      { date: '2025-04-07', mood: 'neutral', note: 'Felt okay' },
+      { date: '2025-04-08', mood: 'positive', note: 'Felt happy' },
+      { date: '2025-04-09', mood: 'positive', note: 'Productive day' },
+      { date: '2025-04-10', mood: 'negative', note: 'Overwhelmed' },
+    ];
 
-  const moodScore = {
-    negative: 1.2,
-    neutral: 2,
-    positive: 3,
-  };
+    const moodScore = {
+      negative: 1.2,
+      neutral: 2,
+      positive: 3,
+    };
 
-  const chartData = useMemo(
-    () =>
-      moodData.map((entry) => ({
-        ...entry,
-        score: moodScore[entry.mood],
-        label: `${entry.note} on ${entry.date}`,
-      })),
-    []
-  );
+    return moodData.map((entry) => ({
+      ...entry,
+      score: moodScore[entry.mood],
+      label: `${entry.note} on ${entry.date}`,
+    }));
+  }, []);
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 p-2 sm:p-4 md:p-6 lg:p-10 text-gray-800 transition-colors duration-500">
@@ -78,7 +76,6 @@ const Page = () => {
                 labelFormatter={() => ''}
                 contentStyle={{
                   backgroundColor: '#fff',
-                  color: '#fff',
                   borderRadius: '8px',
                   fontSize: '14px',
                   padding: '8px',

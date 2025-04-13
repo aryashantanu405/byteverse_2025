@@ -4,6 +4,8 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, Brain, Heart, Shield } from 'lucide-react';
 import { useUser, SignOutButton } from '@clerk/nextjs';
+import Image from 'next/image';
+
 
 export default function Landing() {
   const router = useRouter();
@@ -24,10 +26,10 @@ export default function Landing() {
                 onClick={() => router.push('/Dashboard')}
                 className="flex items-center gap-2 text-purple-600 hover:text-purple-800 transition-colors"
               >
-                <img
+                <Image
                   src={user?.imageUrl || '/default-avatar.png'}
                   alt="User Avatar"
-                  className="w-8 h-8 rounded-full"
+                  className="w-8 h-8 rounded-full" width={32} height={32} 
                 />
                 <span className="hidden md:inline font-medium">{user?.firstName}</span>
               </button>
