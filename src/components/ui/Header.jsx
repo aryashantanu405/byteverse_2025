@@ -56,7 +56,10 @@ export default function Header() {
           {/* Profile Section */}
           <div className="flex items-center gap-4">
             <SignedIn>
-              <UserButton afterSignOutUrl="/sign-in" />
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600 dark:text-white"></span>
+                <UserButton afterSignOutUrl="/sign-in" />
+              </div>
             </SignedIn>
             <SignedOut>
               <Link
